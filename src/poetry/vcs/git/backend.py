@@ -249,7 +249,10 @@ class Git:
         """
         local: Repo
         if not target.exists():
-            local = Repo.init(str(target), mkdir=True)
+            try:
+                local = Repo.init(str(target), mkdir=True)
+            except FileExistsError:
+                local = Repo.init(str(target), mkdir=False)
             porcelain.remote_add(local, "origin", url)
         else:
             local = Repo(str(target))
